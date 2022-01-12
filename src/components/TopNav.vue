@@ -3,7 +3,7 @@
 		<!-- {/* ***** Main Menu Area Start ***** */} -->
 		<div class="mainMenu d-flex align-items-center justify-content-between">
 			<!-- {/* Close Icon */} -->
-			<div class="closeIcon" onClick="setMenu('')">
+			<div class="closeIcon" @click="setMenu('')">
 				<svg
 					xmlns="http://www.w3.org/2000/svg"
 					width="40"
@@ -28,11 +28,11 @@
 						<li class="nav-item active">
 							<router-link
 								to="/"
-								:style="{ color: this.$route == '/' ? 'gold' : 'white' }"
+								:style="{ color: this.$route.path == '/' ? 'gold' : 'white' }"
 								class="nav-router-link"
 								onClick="setMenu('')"
 							>
-								<span style="float: left; paddingright: 20px">
+								<span style="float: left; padding-right: 20px">
 									<svg
 										class="bi bi-house"
 										width="1em"
@@ -59,14 +59,15 @@
 								to="/video-charts"
 								:style="{
 									color:
-										this.$route == '/video-charts' || this.$route == '/audio-charts'
+										this.$route.path == '/video-charts' ||
+										this.$route.path == '/audio-charts'
 											? 'gold'
 											: 'white',
 								}"
 								class="nav-router-link"
 								onClick="setMenu('')"
 							>
-								<span style="float: left, paddingRight: 20px">
+								<span style="float: left, padding-right: 20px">
 									<svg
 										class="bi bi-compass"
 										width="1em"
@@ -91,12 +92,12 @@
 							<router-link
 								to="/library"
 								:style="{
-									color: this.$route == '/library' ? 'gold' : 'white',
+									color: this.$route.path == '/library' ? 'gold' : 'white',
 								}"
 								class="nav-router-link"
 								onClick="setMenu('')"
 							>
-								<span style="float: left: paddingRight: 20px">
+								<span style="float: left; padding-right: 20px">
 									<svg
 										class="bi bi-person"
 										width="1em"
@@ -122,7 +123,7 @@
 		<!-- {/* ***** Main Menu Area End ***** */} -->
 
 		<!-- {/* ***** Header Area Start ***** */} -->
-		<header style="backgroundcolor: #232323" class="header-area">
+		<header style="background-color: #232323" class="header-area">
 			<div class="container-fluid p-0">
 				<div class="row">
 					<div class="col-12" style="padding: 0">
@@ -131,29 +132,12 @@
 							<div class="logo-area">
 								<router-link to="/">Black Music</router-link>
 							</div>
-							<!-- {/* Search Form */} -->
-							<div class="contact-form hidden">
-								<input
-									name="search"
-									class="form-control"
-									placeholder="Search songs and artists"
-									style="textcolor: white; color: white; width: 400px"
-									@change="
-										(e) => {
-											var regex = new RegExp(e.target.value, 'gi');
-											setSearch(regex);
-											this.$router.push('/search');
-										}
-									"
-								/>
-							</div>
-							<!-- {/* Search Form End */} -->
+							
 							<div class="menu-content-area d-flex align-items-center">
 								<!-- {/* Header Social Area */} -->
 								<div class="header-social-area d-flex align-items-center">
-									<!-- {props.auth.username == "@guest" ?
-									<Authrouter-links {...props} /> :
-									<Topnavrouter-links {...props} />} -->
+									<AuthLinks v-show="auth.username != '@guest'" />
+									<!-- <TopnavLinks v-show="auth.username != '@guest'" /> -->
 								</div>
 								<!-- {/* Menu Icon */} -->
 								<a
@@ -190,9 +174,9 @@
 		<br />
 		<br />
 		<!-- {/* Remove for profile page for better background image */} -->
-		<!-- {location.pathname.match(/profile/) ||
-				location.pathname.match(/video-charts/) ||
-				location.pathname.match(/audio-charts/) ?
+		<!-- {this.$route.match(/profile/) ||
+				this.$route.match(/video-charts/) ||
+				this.$route.match(/audio-charts/) ?
 				<br class="hidden" /> :
 				<span>
 					<br />
@@ -202,27 +186,37 @@
 </template>
 
 <script>
-// import { router-link, useLocation, useHistory } from 'react-router-dom'
-// import Authrouter-links from "./Authrouter-links"
+import AuthLinks from "./AuthLinks"
 // import Topnavrouter-links from "./TopNavrouter-links"
 
 // Hide TopNav from various pages
-// location.pathname.match("/help/") ||
-// 	location.pathname.match("/post-create") ||
-// 	location.pathname.match("/post-show/") ||
-// 	location.pathname.match("/referral") ||
-// 	location.pathname.match("/login") ||
-// 	location.pathname.match("/register") ?
+// this.$route.match("/help/") ||
+// 	this.$route.match("/post-create") ||
+// 	this.$route.match("/post-show/") ||
+// 	this.$route.match("/referral") ||
+// 	this.$route.match("/login") ||
+// 	this.$route.match("/register") ?
 // 	display = "none" : display = ""
 
 export default {
 	name: "TopNav",
-	props: ["menu", "location", "history", "display"],
-	emits: ["setMenu"],
-	// data() {
-	// 	return {
-	// 	route: this.$route
-	// 	}
-	// }
+	components: {
+		AuthLinks
+	},
+	props: {
+		auth: Object
+	},
+	data() {
+		return {
+			menu: "",
+			display: ""
+		};
+	},
+	methods: {
+		setMenu(value) {
+			this.menu = value
+			console.log(this.$route.path)
+		}
+	}
 };
 </script>
