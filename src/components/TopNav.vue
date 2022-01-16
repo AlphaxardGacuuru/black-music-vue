@@ -1,5 +1,5 @@
 <template>
-	<div id="MyElement" :style="{ display: display }" :class="{ menu }">
+	<div id="MyElement" :style="{ display: showTopnav }" :class="menu">
 		<!-- {/* ***** Main Menu Area Start ***** */} -->
 		<div class="mainMenu d-flex align-items-center justify-content-between">
 			<!-- {/* Close Icon */} -->
@@ -28,9 +28,9 @@
 						<li class="nav-item active">
 							<router-link
 								to="/"
-								:style="{ color: this.$route.path == '/' ? 'gold' : 'white' }"
+								:style="{ color: isHome }"
 								class="nav-router-link"
-								onClick="setMenu('')"
+								@click="setMenu('')"
 							>
 								<span style="float: left; padding-right: 20px">
 									<svg
@@ -54,20 +54,14 @@
 								Home
 							</router-link>
 						</li>
-						<li class="nav-item active">
+						<!-- <li class="nav-item active">
 							<router-link
 								to="/video-charts"
-								:style="{
-									color:
-										this.$route.path == '/video-charts' ||
-										this.$route.path == '/audio-charts'
-											? 'gold'
-											: 'white',
-								}"
+								:style="{ color: isCharts }"
 								class="nav-router-link"
-								onClick="setMenu('')"
+								@click="setMenu('')"
 							>
-								<span style="float: left, padding-right: 20px">
+								<span style="float: left; padding-right: 20px">
 									<svg
 										class="bi bi-compass"
 										width="1em"
@@ -87,15 +81,15 @@
 								</span>
 								Discover
 							</router-link>
-						</li>
-						<li class="nav-item active">
+						</li> -->
+						<!-- <li class="nav-item active">
 							<router-link
 								to="/library"
 								:style="{
-									color: this.$route.path == '/library' ? 'gold' : 'white',
+									color: isLibrary,
 								}"
 								class="nav-router-link"
-								onClick="setMenu('')"
+								@click="setMenu('')"
 							>
 								<span style="float: left; padding-right: 20px">
 									<svg
@@ -114,7 +108,7 @@
 								</span>
 								Library
 							</router-link>
-						</li>
+						</li> -->
 					</ul>
 				</nav>
 			</div>
@@ -136,8 +130,81 @@
 							<div class="menu-content-area d-flex align-items-center">
 								<!-- {/* Header Social Area */} -->
 								<div class="header-social-area d-flex align-items-center">
-									<AuthLinks v-show="auth.username != '@guest'" />
-									<!-- <TopnavLinks v-show="auth.username != '@guest'" /> -->
+									<router-link
+										v-show="auth.username != '@guest'"
+										class="display-4"
+										to="#"
+										@click="setLogin(true)"
+										>Login</router-link
+									>
+									<!-- <router-link class="display-4" to="#" >Register</router-link> -->
+
+									<!-- {/* Avatar Dropdown */} -->
+									<div v-show="auth.username == '@guest'" class="dropdown show">
+										<router-link
+											to="#"
+											role="button"
+											id="dropdownMenua"
+											data-toggle="dropdown"
+											aria-haspopup="true"
+											aria-expanded="false"
+											@click="showAvatarDropdown(!avatarDropdown)"
+										>
+											<Img
+												:src="auth.pp"
+												imgClass="rounded-circle"
+												width="25px"
+												height="25px"
+												alt="Avatar"
+											/>
+										</router-link>
+										<div
+											:style="{
+												'border-radius': '0px',
+												display: avatarDropdown ? 'inline' : 'none',
+												left: '-50px',
+											}"
+											class="dropdown-menu dropdown-menu-right m-0 p-0"
+											aria-labelledby="dropdownMenuButton"
+										>
+											<router-link
+												to="`/profile/${auth.username}`"
+												class="p-3 dropdown-item border-bottom"
+											>
+												<h5>{{ auth.name }}</h5>
+												<h6>{{ auth.username }}</h6>
+											</router-link>
+											<router-link
+												to="#"
+												ref="{btnAdd}"
+												style="display: 'none'"
+												class="p-3 dropdown-item border-bottom"
+											>
+												<h6>Get App</h6>
+											</router-link>
+											<router-link
+												to="/settings"
+												class="p-3 dropdown-item border-bottom"
+											>
+												<h6>Settings</h6>
+											</router-link>
+											<router-link
+												to="#"
+												class="p-3 dropdown-item border-bottom"
+												title="Privacy Policy"
+												@click="onPrivacyPolicy"
+											>
+												<h6>Privacy Policy</h6>
+											</router-link>
+											<router-link
+												to="#"
+												class="p-3 dropdown-item"
+												@click="logout"
+											>
+												<h6>Logout</h6>
+											</router-link>
+										</div>
+									</div>
 								</div>
 								<!-- {/* Menu Icon */} -->
 								<a
@@ -173,50 +240,179 @@
 		</header>
 		<br />
 		<br />
+
 		<!-- {/* Remove for profile page for better background image */} -->
-		<!-- {this.$route.match(/profile/) ||
-				this.$route.match(/video-charts/) ||
-				this.$route.match(/audio-charts/) ?
-				<br class="hidden" /> :
-				<span>
-					<br />
-					<br class="hidden" />
-				</span>} -->
+		<br v-show="showSingleBreak" class="hidden" />
+		<span v-show="!showSingleBreak">
+			<br />
+			<br class="hidden" />
+		</span>
 	</div>
 </template>
 
 <script>
-import AuthLinks from "./AuthLinks"
-// import Topnavrouter-links from "./TopNavrouter-links"
+import axios from "axios";
 
-// Hide TopNav from various pages
-// this.$route.match("/help/") ||
-// 	this.$route.match("/post-create") ||
-// 	this.$route.match("/post-show/") ||
-// 	this.$route.match("/referral") ||
-// 	this.$route.match("/login") ||
-// 	this.$route.match("/register") ?
-// 	display = "none" : display = ""
+import Img from "./Img";
 
 export default {
 	name: "TopNav",
 	components: {
-		AuthLinks
+		Img,
 	},
-	props: {
-		auth: Object
-	},
+	props: [
+		"url",
+		"auth",
+		"errors",
+		"audioAlbums",
+		"cartAudios",
+		"notifications",
+	],
+	emits: ["setErrors", "setMessage", "onNotifications"],
 	data() {
 		return {
 			menu: "",
-			display: ""
+			display: "",
+			avatarDropdown: false,
 		};
 	},
 	methods: {
 		setMenu(value) {
-			this.menu = value
-			console.log(this.$route.path)
-		}
-	}
+			this.menu = value;
+		},
+		log() {
+			console.log(this.auth.username);
+		},
+		// Function for logging out
+		logout(e) {
+			e.preventDefault();
+
+			axios.get("/sanctum/csrf-cookie").then(() => {
+				axios.post(`${this.url}/api/logout`).then(() => {
+					this.$emit("set-message", "Logged out");
+					// Update Auth
+					this.$emit("set-auth", {
+						name: "Guest",
+						username: "@guest",
+						pp: "profile-pics/male_avatar.png",
+						account_type: "normal",
+					});
+				});
+			});
+		},
+
+		onNotification() {
+			axios.get("sanctum/csrf-cookie").then(() => {
+				axios.put(`${this.url}/api/notifications/update`).then(() => {
+					// Update notifications
+					// axios
+					// 	.get(`${this.url}/api/notifications`)
+					// 	.then((res) => this.$emit('set-notifications', res.data));
+				});
+			});
+		},
+		// Delete comment
+		onDeleteNotifications(id) {
+			axios.delete(`${this.url}/api/notifications/${id}`).then(() => {
+				// Update Notifications
+				// axios
+				// 	.get(`${this.url}/api/notifications`)
+				// 	.then((res) => this.$emit('set-notifications', res.data));
+			});
+		},
+		// Function to get to Privacy Policy
+		onPrivacyPolicy() {
+			window.location.href = "https://www.iubenda.com/privacy-policy/38639633";
+		},
+
+		// Dropdown
+		showAvatarDropdown(value) {
+			this.avatarDropdown = value;
+		},
+	},
+	computed: {
+		isHome() {
+			if (this.$route.path == "/") {
+				return "gold";
+			} else {
+				return "white";
+			}
+		},
+		isLibrary() {
+			if (this.$route.path == "/library") {
+				return "gold";
+			} else {
+				return "white";
+			}
+		},
+		isCharts() {
+			if (
+				this.$route.path == "/video-charts" ||
+				this.$route.path == "/video-charts"
+			) {
+				return "gold";
+			} else {
+				return "white";
+			}
+		},
+
+		// Hide TopNav from various pages
+		showTopnav() {
+			if (
+				this.$route.path.match("/help/") ||
+				this.$route.path.match("/post-create") ||
+				this.$route.path.match("/post-show/") ||
+				this.$route.path.match("/referral") ||
+				this.$route.path.match("/login") ||
+				this.$route.path.match("/register")
+			) {
+				return "none";
+			} else {
+				return "";
+			}
+		},
+		showSingleBreak() {
+			if (
+				this.$route.path.match(/profile/) ||
+				this.$route.path.match(/video-charts/) ||
+				this.$route.path.match(/audio-charts/)
+			) {
+				return true;
+			} else {
+				return false;
+			}
+		},
+	},
 };
+
+/*
+ *
+ * PWA Install button */
+// let deferredPrompt;
+// var btnAdd = React.useRef(null);
+
+// // Listen to the install prompt
+// window.addEventListener("beforeinstallprompt", (e) => {
+// 	deferredPrompt = e;
+
+// 	// Show the button
+// 	btnAdd.current.style.display = "block";
+
+// 	// Action when button is clicked
+// 	btnAdd.current.addEventListener("click", (e) => {
+// 		// Show install banner
+// 		deferredPrompt.prompt();
+// 		// Check if the user accepted
+// 		deferredPrompt.userChoice.then((choiceResult) => {
+// 			if (choiceResult.outcome === "accepted") {
+// 				btnAdd.current.innerHTML = "<h6>User accepted</h6>";
+// 			}
+// 			deferredPrompt = null;
+// 		});
+
+// 		window.addEventListener("appinstalled", (evt) => {
+// 			btnAdd.current.innerHTML = "<h6>Installed</h6>";
+// 		});
+// 	});
+// });
 </script>
