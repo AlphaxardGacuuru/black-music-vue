@@ -100,7 +100,7 @@ a:focus {
 }
 
 .sonar-btn.btn-3 {
-    background-color: #232323;
+    background-color: #41B883;
     color: #ffffff;
 }
 
@@ -110,7 +110,7 @@ a:focus {
     height: 100%;
     background-color: transparent;
     border: 1px solid;
-    border-color: #232323;
+    border-color: #41B883;
     right: -6px;
     bottom: -6px;
     content: '';
@@ -118,7 +118,7 @@ a:focus {
 }
 
 .sonar-btn.btn-3:focus {
-    background-color: #232323;
+    background-color: #41B883;
     color: #ffffff;
 }
 
@@ -189,7 +189,7 @@ a:focus {
 .poll-btn:focus,
 .poll-btn:hover {
     background-color: transparent;
-    color: #232323;
+    color: #41B883;
 }
 
 .mysonar-btn-round {
@@ -230,8 +230,8 @@ a:focus {
 }
 
 .poll-btn.btn-2 {
-    background-color: #232323;
-	border-color: #232323;
+    background-color: #41B883;
+	border-color: #41B883;
     font-size: 12px;
     color: #ffffff;
 }
@@ -243,7 +243,7 @@ a:focus {
 }
 
 .mysonar-btn.btn-3 {
-    background-color: #232323;
+    background-color: #41B883;
     color: #ffffff;
 }
 
@@ -253,7 +253,7 @@ a:focus {
     height: 100%;
     background-color: transparent;
     border: 1px solid;
-    border-color: #232323;
+    border-color: #41B883;
     right: -6px;
     bottom: -6px;
     content: '';
@@ -261,7 +261,7 @@ a:focus {
 }
 
 .mysonar-btn.btn-3:focus {
-    background-color: #232323;
+    background-color: #41B883;
     color: #ffffff;
 }
 
@@ -315,7 +315,7 @@ a:focus {
 }
 
 .header-area.sticky {
-    background-color: #232323;
+    background-color: #41B883;
 }
 
 @media only screen and (max-width: 767px) {
@@ -330,7 +330,7 @@ a:focus {
     height: 100%;
     top: 0;
     right: -500px;
-    background-color: #232323;
+    background-color: #41B883;
     z-index: 99999;
     text-align: center;
     -webkit-box-orient: vertical;
@@ -702,7 +702,7 @@ a:focus {
     /* Remove outline */
     cursor: pointer;
     /* Add a mouse pointer on hover */
-    background-color: #232323;
+    background-color: #41B883;
     border-radius: 50%;
     box-shadow: 0 2px 6px 0 rgba(0, 0, 0, 0.3);
     color: #ffffff;
@@ -1078,7 +1078,7 @@ div.hidden-scroll span {
     padding: 5px 20px;
     border-radius: 20px;
     color: white;
-    background-color: #232323;
+    background-color: #41B883;
 }
 
 /*CSS for scrollmenu in charts*/
@@ -1114,7 +1114,7 @@ div.hidden-scroll span {
     height: auto;
     -webkit-transition-duration: 500ms;
     transition-duration: 500ms;
-    background-color: #232323;
+    background-color: #41B883;
     padding: 0px 0px;
     /* display: none; */
 }
@@ -1158,7 +1158,7 @@ div.hidden-scroll span {
 }
 
 .bottomNav.sticky {
-    background-color: #232323;
+    background-color: #41B883;
 }
 
 @media only screen and (max-width: 767px) {
@@ -1229,7 +1229,7 @@ div.hidden-scroll span {
 
 /* the draggable scrolling handle */
 ::-webkit-scrollbar-thumb {
-    background: #232323;
+    background: #41B883;
     border-radius: 20px;
     border: 1px solid white;
 }
@@ -1237,7 +1237,7 @@ div.hidden-scroll span {
 /* Handle on hover */
 ::-webkit-scrollbar-thumb:hover {
     background: #fff;
-    border: 1px solid #232323;
+    border: 1px solid #41B883;
 }
 
 /*the track (progress bar) NOT covered by the handle*/
@@ -1397,7 +1397,7 @@ html, body {
 } */
 
 .bottomMenu .logo-area a {
-    color: #232323;
+    color: #41B883;
     font-size: 30px;
     display: block;
     font-weight: 100;
@@ -1411,7 +1411,7 @@ html, body {
 
 .bottomMenu p {
     margin-bottom: 0;
-    color: #232323;
+    color: #41B883;
 }
 
 @media only screen and (max-width: 767px) {
@@ -1422,11 +1422,11 @@ html, body {
 
 .bottomMenu a {
     font-weight: 300;
-    color: #232323;
+    color: #41B883;
 }
 
 .bottomMenu .nav-link {
-    color: #232323;
+    color: #41B883;
     font-size: 18px;
     position: relative;
     z-index: 1;
@@ -1507,7 +1507,7 @@ html, body {
   -webkit-box-pack: center;
   -ms-flex-pack: center;
   justify-content: center;
-  background-color: #232323;
+  background-color: #41B883;
   background: transparent;
   position: fixed;
   width: 100%;
@@ -1523,7 +1523,7 @@ html, body {
   border-style: solid;
   border-color: transparent;
   /* border-top-color: #f8f5f5; */
-  border-top-color: #232323;
+  border-top-color: #41B883;
   -webkit-animation: sonar 2400ms linear infinite;
   animation: sonar 2400ms linear infinite;
   z-index: 999; }
@@ -1539,7 +1539,7 @@ html, body {
     border-style: solid;
     border-color: transparent;
     /* border-top-color: #f8f5f5; */
-    border-top-color: #232323;
+    border-top-color: #41B883;
     -webkit-animation: sonar 2700ms linear infinite;
     animation: sonar 2700ms linear infinite; }
   #sonar-load:after {
@@ -1554,7 +1554,7 @@ html, body {
     border-style: solid;
     border-color: transparent;
     /* border-top-color: #f8f5f5; */
-    border-top-color: #232323;
+    border-top-color: #41B883;
     -webkit-animation: sonar 1800ms linear infinite;
     animation: sonar 1800ms linear infinite; }
 

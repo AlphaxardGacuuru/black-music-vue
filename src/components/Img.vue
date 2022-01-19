@@ -1,31 +1,17 @@
 <template>
-	<img
-		:src="src"
-		:width="width"
-		:height="height"
-		:class="imgClass"
-		:style="style"
-		:alt="alt"
-		loading="lazy"
-	/>
+  <img
+    :src="src"
+    :alt="alt"
+    loading="lazy"
+  />
 </template>
 
 <script>
 export default {
-	name: "Img",
-	props: {
-		src: {
-			type: String,
-			default: "img/img/musical-note.png",
-		},
-		width: String,
-		height: String,
-		imgClass: String,
-		style: Object,
-		alt: {
-			type: String,
-			default: "Avatar",
-		},
-	},
+  name: "Img",
+  props: {
+    src: { default: "storage/img/musical-note.png" },
+    alt: { default: "Avatar" },
+  },
 };
 </script>

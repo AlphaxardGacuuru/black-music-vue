@@ -117,7 +117,7 @@
 		<!-- {/* ***** Main Menu Area End ***** */} -->
 
 		<!-- {/* ***** Header Area Start ***** */} -->
-		<header style="background-color: #232323" class="header-area">
+		<header style="background-color: #41B883" class="header-area">
 			<div class="container-fluid p-0">
 				<div class="row">
 					<div class="col-12" style="padding: 0">
@@ -131,7 +131,7 @@
 								<!-- {/* Header Social Area */} -->
 								<div class="header-social-area d-flex align-items-center">
 									<router-link
-										v-show="auth.username != '@guest'"
+										v-show="auth.username == '@guest'"
 										class="display-4"
 										to="#"
 										@click="setLogin(true)"
@@ -140,7 +140,7 @@
 									<!-- <router-link class="display-4" to="#" >Register</router-link> -->
 
 									<!-- {/* Avatar Dropdown */} -->
-									<div v-show="auth.username == '@guest'" class="dropdown show">
+									<div v-show="auth.username != '@guest'" class="dropdown show">
 										<router-link
 											to="#"
 											role="button"
@@ -152,9 +152,8 @@
 										>
 											<Img
 												:src="auth.pp"
-												imgClass="rounded-circle"
-												width="25px"
-												height="25px"
+												class="rounded-circle"
+												style="width: 30px; height: 30px"
 												alt="Avatar"
 											/>
 										</router-link>
@@ -187,14 +186,6 @@
 												class="p-3 dropdown-item border-bottom"
 											>
 												<h6>Settings</h6>
-											</router-link>
-											<router-link
-												to="#"
-												class="p-3 dropdown-item border-bottom"
-												title="Privacy Policy"
-												@click="onPrivacyPolicy"
-											>
-												<h6>Privacy Policy</h6>
 											</router-link>
 											<router-link
 												to="#"
@@ -280,9 +271,6 @@ export default {
 		setMenu(value) {
 			this.menu = value;
 		},
-		log() {
-			console.log(this.auth.username);
-		},
 		// Function for logging out
 		logout(e) {
 			e.preventDefault();
@@ -299,30 +287,6 @@ export default {
 					});
 				});
 			});
-		},
-
-		onNotification() {
-			axios.get("sanctum/csrf-cookie").then(() => {
-				axios.put(`${this.url}/api/notifications/update`).then(() => {
-					// Update notifications
-					// axios
-					// 	.get(`${this.url}/api/notifications`)
-					// 	.then((res) => this.$emit('set-notifications', res.data));
-				});
-			});
-		},
-		// Delete comment
-		onDeleteNotifications(id) {
-			axios.delete(`${this.url}/api/notifications/${id}`).then(() => {
-				// Update Notifications
-				// axios
-				// 	.get(`${this.url}/api/notifications`)
-				// 	.then((res) => this.$emit('set-notifications', res.data));
-			});
-		},
-		// Function to get to Privacy Policy
-		onPrivacyPolicy() {
-			window.location.href = "https://www.iubenda.com/privacy-policy/38639633";
 		},
 
 		// Dropdown
