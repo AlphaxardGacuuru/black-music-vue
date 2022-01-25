@@ -16,6 +16,12 @@ const routes = [
     component: () =>
       import(/* webpackChunkName: "about" */ "../views/Profile.vue"),
   },
+  {
+    path: "/post-show/:id",
+    name: "PostShow",
+    component: () =>
+      import(/* webpackChunkName: "about" */ "../views/PostShow.vue"),
+  },
 ];
 
 const router = createRouter({

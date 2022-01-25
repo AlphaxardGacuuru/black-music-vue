@@ -105,7 +105,7 @@
             class="media p-2 border-bottom"
           >
             <div class="media-left">
-              <router-link to="`/profile/${user.username}`">
+              <router-link :to="`/profile/${musician.username}`">
                 <Img
                   :src="musician.pp"
                   class="rounded-circle"
@@ -120,9 +120,9 @@
                 class="text-dark"
               >
                 <b>{{ musician.name }}</b>
-                <small
-                  ><i>{{ musician.username }}</i></small
-                >
+                <small>
+                  <i>{{ musician.username }}</i>
+                </small>
               </router-link>
 
               <!-- {/* Check whether user has bought at least one song from user */} -->
@@ -134,7 +134,7 @@
                 <button
                   v-if="musician.hasFollowed"
                   class="btn btn-light float-right rounded-0"
-                  @click="onFollow(musician.username)"
+                  @click="$emit('on-follow', musician.username)"
                 >
                   Followed
                   <!-- <svg
@@ -153,16 +153,16 @@
                 </button>
                 <Button
                   v-else
-                  :btnClass="'mysonar-btn float-right'"
-                  @click="onFollow(musician.username)"
+                  class="mysonar-btn float-right"
+                  @click="$emit('on-follow', musician.username)"
                   text="follow"
                 />
               </span>
               <div v-else>
                 <Button
-                  :btnClass="'mysonar-btn float-right'"
+                  class="mysonar-btn float-right"
                   @click="
-                    setErrors([
+                    $emit('set-errors', [
                       `You must have bought atleast one song by ${musician.username}`,
                     ])
                   "
@@ -285,7 +285,7 @@
               </a>
 
               <!-- {/* Post comments */} -->
-              <router-link :to="'post-show/' + post.id">
+              <router-link :to="'/post-show/' + post.id">
                 <svg
                   class="bi bi-chat ml-5"
                   width="1.2em"
@@ -360,9 +360,6 @@
       </div>
       <!-- {/* Posts area end */} -->
 
-      <span>{{ message }}</span>
-      <button @click="$emit('set-message', 'new message')">Change</button>
-
       <div class="col-sm-1"></div>
     </div>
   </div>
@@ -393,6 +390,7 @@ export default {
     "set-message",
     "setPosts",
     "setPostComments",
+	"on-follow"
   ],
   methods: {
     // Function for liking posts
