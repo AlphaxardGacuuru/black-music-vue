@@ -1,5 +1,6 @@
 import { createRouter, createWebHashHistory } from "vue-router";
 import Index from "../views/Index.vue";
+import PostCreate from "../views/PostCreate.vue"
 
 const routes = [
   {
@@ -22,6 +23,11 @@ const routes = [
     component: () =>
       import(/* webpackChunkName: "about" */ "../views/PostShow.vue"),
   },
+  {
+	  path: "/post-create",
+	  name: "PostCreate",
+	  component: PostCreate
+  }
 ];
 
 const router = createRouter({

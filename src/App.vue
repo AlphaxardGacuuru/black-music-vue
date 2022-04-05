@@ -153,7 +153,7 @@ export default {
     onFollow(musician) {
       console.log(musician);
       axios
-        .post('http://localhost:8081/users', { username: musician })
+        .post("http://localhost:8081/users", { username: musician })
         .then((res) => console.log(res.data))
         .catch((err) => console.log(err.response.data));
 
@@ -195,6 +195,16 @@ export default {
     axios
       .get("http://localhost:8081/posts")
       .then((res) => this.setPosts(res.data))
+      .catch(() => this.setErrors(["failed to fetch Posts"]));
+
+    // Fetch Posts
+    axios
+      .get("http://localhost:4000/api/posts")
+      .then((res) => {
+        var d = this.posts;
+        d.push(...res.data.data);
+        this.setPosts(d);
+      })
       .catch(() => this.setErrors(["failed to fetch Posts"]));
 
     // Fetch Posts Comments

@@ -3,8 +3,9 @@
     <!-- {/* Post button */} -->
     <router-link
       v-if="auth.account_type == 'musician'"
-      to="post-create"
+      to="/post-create"
       id="floatBtn"
+      class="pt-2"
     >
       <svg
         xmlns="http://www.w3.org/2000/svg"
@@ -178,7 +179,7 @@
       <div class="col-sm-4">
         <!-- {/* ****** Songs Area ****** */} -->
         <div class="p-2 border">
-          <h5>Songs for you</h5>
+          <h5>Posts for you</h5>
           <div class="hidden-scroll" onScroll="handleScroll"></div>
         </div>
         <!-- {/* ****** Songs Area End ****** */} -->
@@ -201,7 +202,7 @@
                 </router-link>
               </div>
             </div>
-            <div class="media-body">
+            <div class="media-body pl-2">
               <h6
                 class="media-heading m-0"
                 style="
@@ -213,38 +214,11 @@
               >
                 <b>{{ post.name }}</b>
                 <small>{{ post.username }}</small>
-                <span class="ml-1" style="color: gold">
-                  <svg
-                    class="bi bi-circle"
-                    width="1em"
-                    height="1em"
-                    view-box="0 0 16 16"
-                    fill="currentColor"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path
-                      fill-rule="evenodd"
-                      d="M8 15A7 7 0 1 0 8 1a7 7 0 0 0 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"
-                    />
-                  </svg>
-                  <small class="ml-1">{{ post.decos }}</small>
-                </span>
                 <small>
                   <i class="float-right mr-1">{{ post.created_at }}</i>
                 </small>
               </h6>
               <p class="mb-0">{{ post.text }}</p>
-
-              <!-- {/* Show media */} -->
-              <div class="mb-1" style="overflow: hidden">
-                <Img
-                  v-if="post.media"
-                  src="`storage/${post.media}`"
-                  width="100%"
-                  height="auto"
-                  alt="post-media"
-                />
-              </div>
 
               <!-- {/* Post likes */} -->
               <a
@@ -268,7 +242,7 @@
                 </svg>
                 <small class="ml-1">{{ post.likes }}</small>
               </a>
-              <a v-else href="#" @click="onPostLike(post.id)">
+              <span v-else @click="onPostLike(post.id)" class="dislike">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   width="1.2em"
@@ -282,10 +256,10 @@
                   />
                 </svg>
                 <small class="ml-1">{{ post.likes }}</small>
-              </a>
+              </span>
 
               <!-- {/* Post comments */} -->
-              <router-link :to="'/post-show/' + post.id">
+              <!-- <router-link :to="'/post-show/' + post.id">
                 <svg
                   class="bi bi-chat ml-5"
                   width="1.2em"
@@ -300,10 +274,32 @@
                   />
                 </svg>
                 <small class="ml-1">{{ post.comments }}</small>
-              </router-link>
+              </router-link> -->
+
+              <span
+                style="float: right; cursor: pointer"
+                @click="onDeletePost(post.id)"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="16"
+                  height="16"
+                  fill="currentColor"
+                  class="bi bi-trash"
+                  viewBox="0 0 16 16"
+                >
+                  <path
+                    d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z"
+                  />
+                  <path
+                    fill-rule="evenodd"
+                    d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z"
+                  />
+                </svg>
+              </span>
 
               <!-- {/* Default dropup button */} -->
-              <div class="dropup float-right">
+              <!-- <div class="dropup float-right">
                 <a
                   href="#"
                   role="button"
@@ -353,10 +349,12 @@
                     </a>
                   </div>
                 </div>
-              </div>
+              </div> -->
             </div>
           </div>
         </div>
+        <br />
+        <br />
       </div>
       <!-- {/* Posts area end */} -->
 
@@ -390,61 +388,43 @@ export default {
     "set-message",
     "setPosts",
     "setPostComments",
-	"on-follow"
+    "on-follow",
   ],
   methods: {
     // Function for liking posts
-    onPostLike(post) {
-      axios.get("sanctum/csrf-cookie").then(() => {
-        axios
-          .post(`${this.url}/api/post-likes`, {
-            post: post,
-          })
-          .then((res) => {
-            this.setMessage(res.data);
-            // Update posts
-            axios
-              .get(`${this.url}/api/posts`)
-              .then((res) => this.setPosts(res.data));
-          })
-          .catch((err) => {
-            const resErrors = err.response.data.errors;
-            var resError;
-            var newError = [];
-            for (resError in resErrors) {
-              newError.push(resErrors[resError]);
-            }
-            // Get other errors
-            newError.push(err.response.data.message);
-            this.setErrors(newError);
-          });
-      });
+    onPostLike(id) {
+      const postToUpdate = this.posts.find((post) => post.id == id);
+      //   const updatedPost = {
+      //     ...postToUpdate,
+      //     hasLiked: !postToUpdate.hasLiked,
+      //   };
+      console.log(postToUpdate);
+      //   axios
+      // .put(`${this.url}/posts/${id}`, { updatedPost })
     },
 
     // Function for deleting posts
     onDeletePost(id) {
-      axios.get("sanctum/csrf-cookie").then(() => {
-        axios
-          .delete(`${this.url}/api/posts/${id}`)
-          .then((res) => {
-            this.setMessage(res.data);
-            // Update posts
-            axios
-              .get(`${this.url}/api/posts`)
-              .then((res) => this.setPosts(res.data));
-          })
-          .catch((err) => {
-            const resErrors = err.response.data.errors;
-            var resError;
-            var newError = [];
-            for (resError in resErrors) {
-              newError.push(resErrors[resError]);
-            }
-            // Get other errors
-            newError.push(err.response.data.message);
-            this.setErrors(newError);
-          });
-      });
+      axios
+        .delete(`${this.url}/posts/${id}`)
+        .then(() => {
+          // Update posts
+          this.$emit(
+            "setPosts",
+            this.posts.filter((post) => post.id != id)
+          );
+        })
+        .catch((err) => {
+          const resErrors = err.response.data.errors;
+          var resError;
+          var newError = [];
+          for (resError in resErrors) {
+            newError.push(resErrors[resError]);
+          }
+          // Get other errors
+          newError.push(err.response.data.message);
+          this.setErrors(newError);
+        });
     },
 
     // Function for loading more artists
@@ -474,7 +454,8 @@ export default {
         .slice(0, 10);
     },
     homePosts() {
-      return this.posts.filter((post) => post.hasFollowed);
+      //   return this.posts.filter((post) => post.hasFollowed);
+      return this.posts;
     },
   },
 };

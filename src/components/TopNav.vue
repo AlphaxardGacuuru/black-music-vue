@@ -173,7 +173,7 @@
 												<h5>{{ auth.name }}</h5>
 												<h6>{{ auth.username }}</h6>
 											</router-link>
-											<router-link
+											<!-- <router-link
 												to="#"
 												ref="{btnAdd}"
 												style="display: 'none'"
@@ -193,7 +193,7 @@
 												@click="logout"
 											>
 												<h6>Logout</h6>
-											</router-link>
+											</router-link> -->
 										</div>
 									</div>
 								</div>
