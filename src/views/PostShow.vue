@@ -27,18 +27,18 @@
         <div
           v-for="comment in comments"
           :key="comment.id"
-          class="media p-2 border-bottom"
+          class="d-flexp-2 border-bottom"
         >
-          <div class="media-left">
-            <div class="avatar-thumbnail-xs" style="borderradius: '50%'">
+          <div class="">
+            <div class="avatar-thumbnail-xs" style="border-radius: '50%'">
               <router-link to="`/home/${comment.user_id}`">
                 <Img :src="comment.pp" width="40px" height="40px" />
               </router-link>
             </div>
           </div>
-          <div class="media-body p-2">
+          <div class="p-2">
             <h6
-              class="media-heading m-0"
+              class="m-0"
               style="
                 width: 100%;
                 white-space: nowrap;

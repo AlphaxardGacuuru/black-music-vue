@@ -75,7 +75,7 @@ export default {
   data() {
     return {
       login: "",
-      url: "http://localhost:8081",
+      url: "http://localhost:4000",
       auth: {
         name: "Guest",
         username: "@guest",
@@ -100,6 +100,9 @@ export default {
     };
   },
   methods: {
+    setState(state, value) {
+      state = value;
+    },
     setLogin(value) {
       this.login = value;
     },
@@ -193,31 +196,21 @@ export default {
 
     // Fetch Posts
     axios
-      .get("http://localhost:8081/posts")
-      .then((res) => this.setPosts(res.data))
-      .catch(() => this.setErrors(["failed to fetch Posts"]));
-
-    // Fetch Posts
-    axios
       .get("http://localhost:4000/api/posts")
-      .then((res) => {
-        var d = this.posts;
-        d.push(...res.data.data);
-        this.setPosts(d);
-      })
+      .then((res) => this.setPosts(res.data.data))
       .catch(() => this.setErrors(["failed to fetch Posts"]));
 
-    // Fetch Posts Comments
-    axios
-      .get("http://localhost:8081/post-comments")
-      .then((res) => this.setPostComments(res.data))
-      .catch(() => this.setErrors(["failed to fetch Post Comments"]));
+    // // Fetch Posts Comments
+    // axios
+    //   .get("http://localhost:4000/post-comments")
+    //   .then((res) => this.setPostComments(res.data))
+    //   .catch(() => this.setErrors(["failed to fetch Post Comments"]));
 
-    // Fetch Users
-    axios
-      .get("http://localhost:8081/users")
-      .then((res) => this.setUsers(res.data))
-      .catch(() => this.setErrors(["failed to fetch Users"]));
+    // // Fetch Users
+    // axios
+    //   .get("http://localhost:4000/users")
+    //   .then((res) => this.setUsers(res.data))
+    //   .catch(() => this.setErrors(["failed to fetch Users"]));
   },
 };
 </script>

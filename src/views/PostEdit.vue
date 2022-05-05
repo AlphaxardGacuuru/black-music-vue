@@ -3,15 +3,14 @@
     <div class="col-sm-4"></div>
     <div class="col-sm-4">
       <div class="contact-form">
-        <div class="d-flex justify-content-between">
+        <div class="d-flex justify-content-between m-0">
           <!-- {/* Close Icon */} -->
           <div class="">
             <router-link to="/">
-              <Button class="mysonar-btn float-right" text="back" />
-              <!-- <svg
+              <svg
                 xmlns="http://www.w3.org/2000/svg"
-                width="20"
-                height="20"
+                width="16"
+                height="16"
                 fill="currentColor"
                 class="bi bi-x"
                 view-box="0 0 16 16"
@@ -19,15 +18,8 @@
                 <path
                   d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z"
                 />
-              </svg> -->
+              </svg>
             </router-link>
-          </div>
-          <div class="">
-            <Img
-              :src="auth.pp"
-              style="width: 40px; height: 40px"
-              alt="avatar"
-            />
           </div>
           <div class="">
             <Button
@@ -45,7 +37,6 @@
             name="post-text"
             class="form-control m-0 p-2"
             style="resize: none"
-            placeholder="Say something"
             row="1"
             col="500"
             v-model="text"
@@ -61,13 +52,11 @@
 <script>
 import axios from "axios";
 
-import Img from "../components/Img";
 import Button from "../components/Button";
 
 export default {
-  name: "PostCreate",
+  name: "PostEdit",
   components: {
-    Img,
     Button,
   },
   props: ["url", "auth", "message", "errors", "posts"],
@@ -89,15 +78,16 @@ export default {
       };
 
       axios
-        .post(`http://localhost:4000/api/posts`, {
+        .patch(`${this.url}/api/posts/${this.$route.params.id}`, {
           post: this.formData,
         })
         .then((res) => {
-          console.log(res.data);
+			console.log(res.data)
           //   Update posts
           axios
-            .get("http://localhost:4000/api/posts")
+            .get(`${this.url}/api/posts`)
             .then((res) => this.$emit("setPosts", res.data.data));
+			this.$router.push("/")
         })
         .catch((err) => {
           const resErrors = err.response.data.errors;
@@ -113,6 +103,16 @@ export default {
           // setErrors(newError)
         });
     },
+  },
+  computed: {
+    postToEdit() {
+      return this.posts.find((post) => (post.id = this.$route.params.id));
+    },
+  },
+  mounted() {
+    setTimeout(() => {
+      this.text = this.postToEdit.text;
+    }, 500);
   },
 };
 </script>
