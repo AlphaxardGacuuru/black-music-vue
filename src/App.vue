@@ -2,62 +2,21 @@
   <TopNav
     :url="url"
     :auth="auth"
-    @setAuth="setAuth"
     :message="message"
-    @setMessage="setMessage"
     :errors="errors"
-    @set-errors="setErrors"
-    :audioAlbums="audioAlbums"
-    @set-audioAlbums="setAudioAlbums"
-    :audioComments="audioComments"
-    @set-audioComments="setAudioComments"
-    :audioPayouts="audioPayouts"
-    @set-audioPayouts="setAudioPayouts"
-    :audios="audios"
-    @set-audios="setAudios"
-    :boughtAudios="boughtAudios"
-    @set-boughtAudios="setBoughtAudios"
-    :cartAudios="cartAudios"
-    @set-cartAudios="setCartAudios"
-    :kopokopoRecipients="kopokopoRecipients"
-    @set-kopokopoRecipients="setKopokopoRecipients"
-    :notifications="notifications"
-    @set-notifications="setNotifications"
     :posts="posts"
-    @set-posts="setPosts"
     :postComments="postComments"
-    @set-postComments="setPostComments"
     :users="users"
   />
   <router-view
     :url="url"
     :auth="auth"
-    @setAuth="setAuth"
     :message="message"
-    @setMessage="setMessage"
     :errors="errors"
-    @set-errors="setErrors"
-    :audioAlbums="audioAlbums"
-    @set-audioAlbums="setAudioAlbums"
-    :audioComments="audioComments"
-    @set-audioComments="setAudioComments"
-    :audioPayouts="audioPayouts"
-    @set-audioPayouts="setAudioPayouts"
-    :audios="audios"
-    @set-audios="setAudios"
-    :boughtAudios="boughtAudios"
-    @set-boughtAudios="setBoughtAudios"
-    :cartAudios="cartAudios"
-    @set-cartAudios="setCartAudios"
-    :kopokopoRecipients="kopokopoRecipients"
-    @set-kopokopoRecipients="setKopokopoRecipients"
-    :notifications="notifications"
-    @set-notifications="setNotifications"
     :posts="posts"
-    @set-posts="setPosts"
     :postComments="postComments"
-    @set-postComments="setPostComments"
     :users="users"
+    @setState="setState"
     @onFollow="onFollow"
   ></router-view>
 </template>
@@ -100,61 +59,19 @@ export default {
     };
   },
   methods: {
+    //   Function to change state
     setState(state, value) {
-      state = value;
-    },
-    setLogin(value) {
-      this.login = value;
-    },
-    setUrl(value) {
-      this.url = value;
-    },
-    setAuth(value) {
-      this.auth = value;
-    },
-    setMessage(value) {
-      this.message = value;
-    },
-    setErrors(value) {
-      this.errors = value;
-    },
-    setAudioAlbums(value) {
-      this.audioAlbums = value;
-    },
-    setAudioComments(value) {
-      this.audioComments = value;
-    },
-    setAudioPayouts(value) {
-      this.audioPayouts = value;
-    },
-    setAudios(value) {
-      this.audios = value;
-    },
-    setBoughtAudios(value) {
-      this.boughtAudios = value;
-    },
-    setCartAudios(value) {
-      this.cartAudios = value;
-    },
-    setKopokopoRecipients(value) {
-      this.kopokopoRecipients = value;
-    },
-    setNotifications(value) {
-      this.notifications = value;
-    },
-    setPosts(value) {
-      this.posts = value;
-    },
-    setPostComments(value) {
-      this.postComments = value;
-    },
-    setUsers(value) {
-      this.users = value;
+      if (state == "auth") {
+        this.auth = value;
+      } else if(state == "posts") {
+        this.posts = value;
+      } else if(state == "users") {
+		  this.users = value
+	  }
     },
 
     // Function for following users
     onFollow(musician) {
-      console.log(musician);
       axios
         .post("http://localhost:8081/users", { username: musician })
         .then((res) => console.log(res.data))
@@ -191,14 +108,14 @@ export default {
     // Fetch Auth
     axios
       .get("http://localhost:8081/home")
-      .then((res) => this.setAuth(res.data[0]))
-      .catch(() => this.setErrors(["failed to fetch Auth"]));
+      .then((res) => this.setState("auth", res.data[0]))
+      .catch(() => this.setState("errors", ["failed to fetch Auth"]));
 
     // Fetch Posts
     axios
       .get("http://localhost:4000/api/posts")
-      .then((res) => this.setPosts(res.data.data))
-      .catch(() => this.setErrors(["failed to fetch Posts"]));
+      .then((res) => this.setState("posts", res.data.data))
+      .catch(() => this.setState("errors", ["failed to fetch Posts"]));
 
     // // Fetch Posts Comments
     // axios
@@ -206,11 +123,15 @@ export default {
     //   .then((res) => this.setPostComments(res.data))
     //   .catch(() => this.setErrors(["failed to fetch Post Comments"]));
 
-    // // Fetch Users
+    // Fetch Users
     // axios
-    //   .get("http://localhost:4000/users")
-    //   .then((res) => this.setUsers(res.data))
-    //   .catch(() => this.setErrors(["failed to fetch Users"]));
+    //   .get("http://localhost:8081/api/users")
+    //   .then((res) => this.setState("users", res.data))
+    //   .catch(() => this.setState("errors", ["failed to fetch Users"]));
   },
 };
 </script>
+
+<style>
+/* @import'~bootstrap/dist/css/bootstrap.css'; */
+</style>

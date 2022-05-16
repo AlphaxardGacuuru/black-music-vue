@@ -160,14 +160,7 @@ export default {
     Img,
   },
   props: ["url", "auth", "message", "errors", "posts", "postComments", "users"],
-  emits: [
-    "set-auth",
-    "setErrors",
-    "set-message",
-    "setPosts",
-    "setPostComments",
-    "on-follow",
-  ],
+  emits: ["setState"],
   methods: {
     // Function for liking comments
     // onCommentLike(comment) {

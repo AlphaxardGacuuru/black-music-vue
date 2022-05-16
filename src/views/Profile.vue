@@ -322,7 +322,7 @@ export default {
     Button,
   },
   props: ["url", "auth", "errors", "posts", "postComments", "users"],
-  emits: ["set-errors", "set-message"],
+  emits: ["setState"],
   data() {
     return {
       username: "",
